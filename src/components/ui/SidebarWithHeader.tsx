@@ -4,8 +4,11 @@ import { Box, BoxProps, CloseButton, Drawer,
   DrawerBody,
   DrawerHeader,
   DrawerContent,
-  Flex, FlexProps, HStack, Icon, IconButton, Text, useDisclosure, 
-  Menu} from "@chakra-ui/react"
+  Flex, FlexProps, HStack, Icon, IconButton, Text, useDisclosure,
+  Menu,
+  Button,
+  Avatar,
+  VStack} from "@chakra-ui/react"
 import { ReactNode } from "react"
 import {
   FiStar,
@@ -26,6 +29,7 @@ import {
 } from 'react-icons/fa'
 import { IconType } from "react-icons/lib"
 import { useColorModeValue } from "./color-mode"
+import { usePathname, useRouter } from "next/navigation";
 
 interface LinkItemProps {
   name: string
@@ -36,6 +40,7 @@ interface LinkItemProps {
 interface NavItemProps extends FlexProps {
   icon: IconType
   children: ReactNode
+  href?: string
 }
 
 interface MobileProps extends FlexProps {
@@ -65,9 +70,14 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+    const pathname = usePathname(); 
+
     return(
         <Box
+            transition="3s ease"
+            bg={useColorModeValue('white','gray.900')} //ga tau warna fixnya apa wakakkaa
             borderRight="1px"
+            borderRightColor={useColorModeValue('gray.200', 'gray.700')}
             w={{ base: 'full', md: 60 }}
             pos="fixed"
             h="full"
@@ -79,7 +89,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             </Flex>
 
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} icon={link.icon} href={link.href}>
                 {link.name}
                 </NavItem>
             ))}
@@ -88,9 +98,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     )
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
+    const router = useRouter();
+
     return(
-        <Box as="a" _focus={{ boxShadow: 'none' }} style={{ textDecoration: 'none' }}>
+        <Box 
+            as="a" 
+            // ref="#"
+            onClick={() => {
+                if (href) router.push(href);
+            }}
+            _focus={{ boxShadow: 'none' }} 
+            style={{ textDecoration: 'none' }}
+        >
             <Flex
                 align="center"
                 p="4"
@@ -99,34 +119,40 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
                 role="group"
                 cursor="pointer"
                 _hover={{
-                bg: 'cyan.400',
-                color: 'white',
+                    bg: 'cyan.400',
+                    color: 'white',
                 }}
                 {...rest}
             >
-                <Icon mr="4" fontSize="16" as={icon} _groupHover={{ color: 'white' }} />
+                {icon && (
+                    <Icon
+                        mr="4"
+                        fontSize="16"
+                        _groupHover={{
+                        color: 'white',
+                        }}
+                        as={icon}
+                    />
+                    )}
                 {children}
             </Flex>
         </Box>
     )
 }
 
-const MobileNav = ({ onOpen }: MobileProps) => {
+const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     return(
         <Flex
             ml={{ base: 0, md: 60 }}
-            px={{ base: 4, md: 4 }}
+            px={{ base: 1, md: 4 }}
             height="20"
             alignItems="center"
+            bg={useColorModeValue('white', 'gray.900')}
             borderBottomWidth="1px"
+            borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
             justifyContent={{ base: 'space-between', md: 'flex-end' }}
+            {...rest}
         >
-            {/* <IconButton
-                display={{ base: 'flex', md: 'none' }}
-                onClick={onOpen}
-                variant="outline"
-                aria-label="open menu"
-            /> */}
             <IconButton display={{ base: 'flex', md: 'none' }}
                 onClick={onOpen}
                 variant="outline"
@@ -137,11 +163,23 @@ const MobileNav = ({ onOpen }: MobileProps) => {
                 ERP Systems
             </Text>
 
-            <HStack >
+            <HStack textSpacingTrim={{base: '0', md: '6'}}>
                 <IconButton size="lg" variant="ghost" aria-label="open menu">
                     <FiBell/>
                 </IconButton>
                 <Flex alignItems="center">
+
+                    {/* Menu ga jelas error */}
+                    <HStack>
+                        <VStack
+                            display={{base: 'none', md: 'flex'}}
+                            alignItems="flex-start"
+                            wordSpacing="1px"
+                            ml="2"
+                        >
+                            <Text fontSize="sm">Kevin Gabriel</Text>
+                        </VStack>
+                    </HStack>
                     
                 </Flex>
             </HStack>
@@ -153,9 +191,9 @@ const SidebarWithHeader = ({ children, title = 'ERP Systems', onLogout }: Sideba
   const { open, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')} width="100vw">
       <SidebarContent onClose={onClose} display={{ base: 'none', md: 'block' }} />
-        <Drawer.Root open={open}> 
+        <Drawer.Root open={open} placement={"start"} size="full" > 
             <Drawer.Content>
                 <SidebarContent onClose={onClose} />
             </Drawer.Content>

@@ -59,13 +59,13 @@ interface SidebarWithHeaderProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Dashboard', icon: FiGrid, href: '/home' },
-  { name: 'Sales', icon: FaDollarSign, href: '/trending' },
-  { name: 'Purchase', icon: FaShoppingBag, href: '/explore' },
-  { name: 'Finance', icon: FaCoins, href: '/favourites' },
-  { name: 'Warehouse', icon: FaTruck, href: '/settings' },
-  { name: 'HR', icon: FaUserFriends, href: '/favourites' },
-  { name: 'Analytics', icon: FaChartBar, href: '/settings' },
-  { name: 'Document', icon: FaFileAlt, href: '/favourites' },
+  { name: 'Sales', icon: FaDollarSign, href: '/sales' },
+  { name: 'Purchase', icon: FaShoppingBag, href: '/purchase' },
+  { name: 'Finance', icon: FaCoins, href: '/finance' },
+  { name: 'Warehouse', icon: FaTruck, href: '/warehouse' },
+  { name: 'HR', icon: FaUserFriends, href: '/hr' },
+  { name: 'Analytics', icon: FaChartBar, href: '/analytics' },
+  { name: 'Document', icon: FaFileAlt, href: '/document' },
   { name: 'Settings', icon: FiSettings, href: '/settings' },
 ]
 

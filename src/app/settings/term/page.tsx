@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import { LogOut, LayoutDashboard, Boxes } from "lucide-react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 
-export default function CustomerSettings(){
+export default function TermSettings(){
     const router = useRouter();
 
     return(
         <SidebarWithHeader>
-            <Heading mb={6}>Customer ERP Settings</Heading>
+            <Heading mb={6}>Term ERP Settings</Heading>
         </SidebarWithHeader>
         // settings
 

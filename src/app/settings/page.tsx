@@ -1,7 +1,7 @@
 "use client";
 
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
-import { Avatar, Card, Center, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Avatar, Card, Heading, SimpleGrid } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 export default function Settings(){

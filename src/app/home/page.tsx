@@ -1,12 +1,9 @@
 "use client";
-import { Box, Button, Card, CardBody, Field, Flex, Heading, Input, InputGroup, SimpleGrid, Stat, Table, Text,} from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { LogOut, LayoutDashboard, Boxes } from "lucide-react";
+import {Card, Heading, SimpleGrid, Stat, Table} from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Dashboard(){
-    const router = useRouter();
 
     const dummyData = [
         { id: 1, name: "Produk A", price: 10000, stock: 20 },

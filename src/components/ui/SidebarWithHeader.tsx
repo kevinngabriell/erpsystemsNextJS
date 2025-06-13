@@ -1,24 +1,16 @@
 'use client'
 
 import { Box, BoxProps, CloseButton, Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerContent,
   Flex, FlexProps, HStack, Icon, IconButton, Text, useDisclosure,
-  Menu,
-  Button,
-  Avatar,
   VStack} from "@chakra-ui/react"
 import { ReactNode } from "react"
 import {
-  FiStar,
   FiSettings,
   FiGrid,
   FiMenu,
   FiBell,
 } from 'react-icons/fi'
 import {
-    FaCartPlus,
     FaChartBar,
     FaCoins,
     FaDollarSign,
@@ -29,7 +21,7 @@ import {
 } from 'react-icons/fa'
 import { IconType } from "react-icons/lib"
 import { useColorModeValue } from "./color-mode"
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface LinkItemProps {
   name: string
@@ -70,7 +62,6 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-    const pathname = usePathname(); 
 
     return(
         <Box
@@ -187,7 +178,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     )
 }
 
-const SidebarWithHeader = ({ children, title = 'ERP Systems', onLogout }: SidebarWithHeaderProps) => {
+const SidebarWithHeader = ({ children }: SidebarWithHeaderProps) => {
   const { open, onOpen, onClose } = useDisclosure()
 
   return (

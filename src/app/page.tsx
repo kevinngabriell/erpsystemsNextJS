@@ -1,8 +1,8 @@
 "use client";
 
 import { PasswordInput } from "@/components/ui/password-input";
-import { Box, Button, Field, Flex, Heading, Input, InputGroup, Text,} from "@chakra-ui/react";
-import { LuKey, LuLock, LuUser } from "react-icons/lu";
+import { Button, Field, Flex, Heading, Input, InputGroup, Text,} from "@chakra-ui/react";
+import { LuLock, LuUser } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 export default function Home() {

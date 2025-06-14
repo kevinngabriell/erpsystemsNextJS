@@ -25,7 +25,8 @@ export default function Settings(){
 
             <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mt={10}>
                 <SettingCard title="Payment" description={"This menu will help you to manage your payment well. Use this menu to create, search, reset, and delete payment."} link={"settings/payment"}/>
-                <SettingCard title="Curreny" description={"This menu will help you to manage your currency well. Use this menu to create, search, reset, and delete currency."} link={"settings/currency"}/>
+                <SettingCard title="Currency" description={"This menu will help you to manage your currency well. Use this menu to create, search, reset, and delete currency."} link={"settings/currency"}/>
+                <SettingCard title="Tax" description={"This menu will help you to manage your tax settings well. Use this menu to create, search, reset, and delete tex."} link={"settings/tax"}/>
                 {/* <SettingCard title={""} description={""} link={""}/>
                 <SettingCard title={""} description={""} link={""}/> */}
             </SimpleGrid>

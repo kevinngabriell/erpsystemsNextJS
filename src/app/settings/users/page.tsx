@@ -2,9 +2,10 @@
 import { Button, ButtonGroup, Flex, Heading, IconButton, Pagination, Table } from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 
 export default function UserSettings(){
+    
     const users = [
         { id: 1, name: "Admin1", company: "PT. Venken International Kimia", permission: "Sales only" },
         { id: 2, name: "Admin2", company: "PT. Venken International Kimia", permission: "Sales only" },
@@ -20,9 +21,9 @@ export default function UserSettings(){
                 <Button>Create New Users</Button>
             </Flex>
 
-            <Table.Root showColumnBorder variant="outline" >
+            <Table.Root showColumnBorder variant="outline" background={"white"} >
                 <Table.Header>
-                    <Table.Row bg="bg.subtle">
+                    <Table.Row bg="bg.panel">
                         <Table.ColumnHeader textAlign={"center"}>Username</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign={"center"}>Company Name</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign={"center"}>Permission Access</Table.ColumnHeader>
@@ -35,15 +36,19 @@ export default function UserSettings(){
                         <Table.Cell textAlign={"center"}>{user.name}</Table.Cell>
                         <Table.Cell textAlign={"center"}>{user.company}</Table.Cell>
                         <Table.Cell textAlign={"center"}>{user.permission}</Table.Cell>
-                        <Table.Cell textAlign={"center"}>
-                            <FiEdit/>
+                        <Table.Cell textAlign="center">
+                            <Flex justify="center" gap={4} fontSize={"2xl"}>
+                                <FiEye />
+                                <FiEdit />
+                                <FiTrash />
+                            </Flex>
                         </Table.Cell>
                     </Table.Row>
                     ))}
                 </Table.Body>
             </Table.Root>
             
-            <Flex display={"flex"} alignItems={"end"} width={"100%"} mt={"3"}>
+            <Flex display={"flex"} justify="flex-end" alignItems={"end"} width={"100%"} mt={"3"}>
                 <Pagination.Root count={users.length} pageSize={5} page={1} alignContent={"end"}>
                     <ButtonGroup variant="ghost" size="sm" wrap="wrap">
                     <Pagination.PrevTrigger asChild>

@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <Flex h="100vh" w="100vw" flexDir={["column", "row"]}>
       {/* Kiri */}
-      <Flex w="100%" h="100vh" justify="center" align="center" bg="gray.100" display={{ base: "none", md: "flex" }}>
+      <Flex w="100%" h="100vh" justify="center" align="center" bg="gray.100" display={{ base: "none", md: "none", lg: "flex" }}>
         <Text fontSize="2xl">Yesyesye</Text>
       </Flex>
 
@@ -27,7 +27,7 @@ export default function Home() {
         <Text color="gray.600">Login to access ERP Systems</Text>
 
         {/* Username */}
-        <Field.Root marginTop={10} w={500}>
+        <Field.Root marginTop={10} w={{base: "100%", md: "100%", lg: "90%"}}>
           <Field.Label>Username</Field.Label>
           <InputGroup startElement={<LuUser/>}>
             <Input placeholder="Enter your username" />
@@ -35,7 +35,7 @@ export default function Home() {
         </Field.Root>
 
         {/* Password */}
-        <Field.Root marginTop={5} w={500}>
+        <Field.Root marginTop={5} w={{base: "100%", md: "100%", lg: "90%"}}>
           <Field.Label>Password</Field.Label>
           <InputGroup startElement={<LuLock/>} >
             <PasswordInput placeholder="Enter your username" />

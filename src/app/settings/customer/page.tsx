@@ -1,5 +1,5 @@
 "use client";
-import { Button, ButtonGroup, Flex, Heading, IconButton, Pagination, Table } from "@chakra-ui/react";
+import { Button, ButtonGroup, CloseButton, Dialog, Field, Flex, Heading, IconButton, Input, Pagination, Portal, SimpleGrid, Table, Text, Textarea } from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
@@ -19,7 +19,71 @@ export default function CustomerSettings(){
 
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Customer ERP Settings</Heading>
-                <Button>Create New Customer</Button>
+
+                <Dialog.Root size={"xl"}>
+                    <Dialog.Trigger asChild>
+                        <Button>Create New Customer</Button>
+                    </Dialog.Trigger>
+                    <Portal>
+                        <Dialog.Backdrop/>
+                        <Dialog.Positioner>
+                            <Dialog.Content>
+                                <Dialog.Header>
+                                    <Dialog.Title>Pendataan Konsumen Baru</Dialog.Title>
+                                </Dialog.Header>
+
+                                <Dialog.Body>
+                                    <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>Nama</Field.Label>
+                                            <Input placeholder="Masukkan nama"/>
+                                        </Field.Root>
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>Nomor Telepon</Field.Label>
+                                            <Input placeholder="Masukkan nomor telepon"/>
+                                        </Field.Root>
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>Alamat</Field.Label>
+                                            <Textarea placeholder="Masukkan alamat"/>
+                                        </Field.Root>
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>Nama PIC</Field.Label>
+                                            <Input placeholder="Masukkan nama pic"/>
+                                        </Field.Root>
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>Kontak PIC</Field.Label>
+                                            <Input placeholder="Masukkan nomor telepon PIC"/>
+                                        </Field.Root>
+
+                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                            <Field.Label>TOP</Field.Label>
+                                            <Input type="number" placeholder="Masukkan jumlah TOP"/>
+                                        </Field.Root>
+
+                                    </SimpleGrid>
+                                </Dialog.Body>
+
+                                <Dialog.Footer>
+                                    <Dialog.ActionTrigger asChild>
+                                        <Button variant="outline">Batal</Button>
+                                    </Dialog.ActionTrigger>
+                                    <Button>Simpan</Button>
+                                </Dialog.Footer>
+
+                                <Dialog.CloseTrigger asChild>
+                                    <CloseButton size="sm" />
+                                </Dialog.CloseTrigger>
+
+                            </Dialog.Content>
+                        </Dialog.Positioner>
+                    </Portal>
+                </Dialog.Root>
+
             </Flex>        
 
             <Table.Root showColumnBorder variant="outline" background={"white"} >
@@ -39,9 +103,167 @@ export default function CustomerSettings(){
                         <Table.Cell textAlign={"center"}>{customer.phone}</Table.Cell>
                         <Table.Cell textAlign="center">
                             <Flex justify="center" gap={4} fontSize={"2xl"}>
-                                <FiEye />
-                                <FiEdit />
-                                <FiTrash />
+                                <Dialog.Root size={"xl"}>
+                                    <Dialog.Trigger asChild>
+                                        <FiEye />
+                                    </Dialog.Trigger>
+                                    <Portal>
+                                        <Dialog.Backdrop/>
+                                        <Dialog.Positioner>
+                                            <Dialog.Content>
+                                                <Dialog.Header>
+                                                    <Dialog.Title>Informasi Konsumen</Dialog.Title>
+                                                </Dialog.Header>
+
+                                                <Dialog.Body>
+                                                    <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nama</Field.Label>
+                                                            <Input placeholder="Masukkan nama"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nomor Telepon</Field.Label>
+                                                            <Input placeholder="Masukkan nomor telepon"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Alamat</Field.Label>
+                                                            <Textarea placeholder="Masukkan alamat"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nama PIC</Field.Label>
+                                                            <Input placeholder="Masukkan nama pic"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Kontak PIC</Field.Label>
+                                                            <Input placeholder="Masukkan nomor telepon PIC"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>TOP</Field.Label>
+                                                            <Input type="number" placeholder="Masukkan jumlah TOP"/>
+                                                        </Field.Root>
+
+                                                    </SimpleGrid>
+                                                </Dialog.Body>
+
+                                                <Dialog.Footer>
+                                                    <Dialog.ActionTrigger asChild>
+                                                        <Button variant="outline">Batal</Button>
+                                                    </Dialog.ActionTrigger>
+                                                    <Button>Simpan</Button>
+                                                </Dialog.Footer>
+
+                                                <Dialog.CloseTrigger asChild>
+                                                    <CloseButton size="sm" />
+                                                </Dialog.CloseTrigger>
+
+                                            </Dialog.Content>
+                                        </Dialog.Positioner>
+                                    </Portal>
+                                </Dialog.Root>
+
+                                <Dialog.Root size={"xl"}>
+                                    <Dialog.Trigger asChild>
+                                        <FiEdit />
+                                    </Dialog.Trigger>
+                                    <Portal>
+                                        <Dialog.Backdrop/>
+                                        <Dialog.Positioner>
+                                            <Dialog.Content>
+                                                <Dialog.Header>
+                                                    <Dialog.Title>Pengkinian Informasi Konsumen</Dialog.Title>
+                                                </Dialog.Header>
+
+                                                <Dialog.Body>
+                                                    <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nama</Field.Label>
+                                                            <Input placeholder="Masukkan nama"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nomor Telepon</Field.Label>
+                                                            <Input placeholder="Masukkan nomor telepon"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Alamat</Field.Label>
+                                                            <Textarea placeholder="Masukkan alamat"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Nama PIC</Field.Label>
+                                                            <Input placeholder="Masukkan nama pic"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>Kontak PIC</Field.Label>
+                                                            <Input placeholder="Masukkan nomor telepon PIC"/>
+                                                        </Field.Root>
+
+                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
+                                                            <Field.Label>TOP</Field.Label>
+                                                            <Input type="number" placeholder="Masukkan jumlah TOP"/>
+                                                        </Field.Root>
+
+                                                    </SimpleGrid>
+                                                </Dialog.Body>
+
+                                                <Dialog.Footer>
+                                                    <Dialog.ActionTrigger asChild>
+                                                        <Button variant="outline">Batal</Button>
+                                                    </Dialog.ActionTrigger>
+                                                    <Button>Simpan</Button>
+                                                </Dialog.Footer>
+
+                                                <Dialog.CloseTrigger asChild>
+                                                    <CloseButton size="sm" />
+                                                </Dialog.CloseTrigger>
+
+                                            </Dialog.Content>
+                                        </Dialog.Positioner>
+                                    </Portal>
+                                </Dialog.Root>
+
+                                <Dialog.Root>
+                                    <Dialog.Trigger asChild>
+                                        <FiTrash />
+                                    </Dialog.Trigger>
+                                    <Portal>
+                                        <Dialog.Backdrop/>
+                                        <Dialog.Positioner>
+                                            <Dialog.Content>
+                                                <Dialog.Header>
+                                                    <Dialog.Title>Hapus Konsumen</Dialog.Title>
+                                                </Dialog.Header>
+
+                                                 <Dialog.Body>
+                                                    <Text>Apakah anda yakin ingin menghapus konsumen ini ?</Text>
+                                                </Dialog.Body>
+
+                                                <Dialog.Footer>
+                                                    <Dialog.ActionTrigger asChild>
+                                                        <Button variant="outline">Batal</Button>
+                                                    </Dialog.ActionTrigger>
+                                                    <Button>Hapus</Button>
+                                                </Dialog.Footer>
+                                                
+                                                <Dialog.CloseTrigger asChild>
+                                                    <CloseButton size="sm" />
+                                                </Dialog.CloseTrigger>
+
+                                            </Dialog.Content>
+                                        </Dialog.Positioner>
+                                    </Portal>
+
+                                </Dialog.Root>   
+
                             </Flex>
                         </Table.Cell>                        
                     </Table.Row>

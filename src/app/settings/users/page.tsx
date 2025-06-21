@@ -84,7 +84,7 @@ export default function UserSettings(){
                                     </Dialog.Trigger>
                                     <Portal>
                                         <Dialog.Backdrop/>
-                                        <Dialog.Positioner style={{ zIndex: 2000 }}>
+                                        <Dialog.Positioner zIndex={3000} position="absolute">
                                             <Dialog.Content>
                                                 <Dialog.Header>
                                                     <Dialog.Title>Detail Users</Dialog.Title>
@@ -112,7 +112,6 @@ export default function UserSettings(){
                                                             <Combobox.Root
                                                             collection={collection}
                                                             onInputValueChange={(e) => filter(e.inputValue)}
-                                                            // width={"320px"}
                                                             >
                                                                 <Combobox.Label>Pilih akses</Combobox.Label>
                                                                 <Combobox.Control>

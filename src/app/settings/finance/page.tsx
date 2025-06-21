@@ -3,6 +3,9 @@ import { Button, ButtonGroup, CloseButton, Dialog, Field, Flex, Heading, IconBut
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import AccountCodeDialog from "./accountcodedialog";
+import BankAccountDialog from "./bankaccountdialog";
+import FinanceCategoryDialog from "./financecategorydialog";
 
 export default function FinanceSettings(){
     const bankaccount = [
@@ -51,54 +54,7 @@ export default function FinanceSettings(){
 
                     <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                         <Heading mb={6} width={"100%"}>Bank Account List</Heading>
-                        <Dialog.Root>
-                            <Dialog.Trigger asChild>
-                                <Button>Create New Bank Account</Button>
-                            </Dialog.Trigger>
-                            <Portal>
-                                <Dialog.Backdrop/>
-                                <Dialog.Positioner>
-                                    <Dialog.Content>
-                                        <Dialog.Header>
-                                            <Dialog.Title>Pendataan Akun Bank</Dialog.Title>
-                                        </Dialog.Header>     
-
-                                        <Dialog.Body>
-                                            <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Nomor Rekening</Field.Label>
-                                                    <Input placeholder="Masukkan nomor rekening"/>
-                                                </Field.Root>
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Bank</Field.Label>
-                                                    <Input placeholder="Masukkan nama bank"/>
-                                                </Field.Root>
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Cabang</Field.Label>
-                                                    <Input placeholder="Masukkan cabang bank terdaftar"/>
-                                                </Field.Root>
-
-                                            </SimpleGrid>
-                                        </Dialog.Body>      
-                                        
-                                        <Dialog.Footer>
-                                            <Dialog.ActionTrigger asChild>
-                                                <Button variant="outline">Batal</Button>
-                                            </Dialog.ActionTrigger>
-                                            <Button>Simpan</Button>
-                                        </Dialog.Footer>
-
-                                        <Dialog.CloseTrigger asChild>
-                                            <CloseButton size="sm" />
-                                        </Dialog.CloseTrigger>                                                                     
-                                    </Dialog.Content>
-                                </Dialog.Positioner>
-                            </Portal>
-
-                        </Dialog.Root>
+                        <BankAccountDialog triggerIcon={<Button>Create New Bank Account</Button>} title="Pendataan Akun Bank"/>
                     </Flex>           
 
                     <Table.Root showColumnBorder variant="outline" background={"white"}>
@@ -118,104 +74,9 @@ export default function FinanceSettings(){
                                 <Table.Cell textAlign={"center"}>{bank.branch}</Table.Cell>
                                 <Table.Cell textAlign="center">
                                     <Flex justify="center" gap={4} fontSize={"2xl"}>
+                                        <BankAccountDialog triggerIcon={ <FiEye />} title="Informasi Akun Bank"/>
 
-                                        <Dialog.Root>
-                                            <Dialog.Trigger asChild>
-                                                <FiEye />
-                                            </Dialog.Trigger>
-                                            <Portal>
-                                                <Dialog.Backdrop/>
-                                                <Dialog.Positioner>
-                                                    <Dialog.Content>
-                                                        <Dialog.Header>
-                                                            <Dialog.Title>Informasi Akun Bank</Dialog.Title>
-                                                        </Dialog.Header>     
-
-                                                        <Dialog.Body>
-                                                            <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Nomor Rekening</Field.Label>
-                                                                    <Input placeholder="Masukkan nomor rekening"/>
-                                                                </Field.Root>
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Bank</Field.Label>
-                                                                    <Input placeholder="Masukkan nama bank"/>
-                                                                </Field.Root>
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Cabang</Field.Label>
-                                                                    <Input placeholder="Masukkan cabang bank terdaftar"/>
-                                                                </Field.Root>
-
-                                                            </SimpleGrid>
-                                                        </Dialog.Body>      
-                                                        
-                                                        <Dialog.Footer>
-                                                            <Dialog.ActionTrigger asChild>
-                                                                <Button variant="outline">Batal</Button>
-                                                            </Dialog.ActionTrigger>
-                                                            <Button>Simpan</Button>
-                                                        </Dialog.Footer>
-
-                                                        <Dialog.CloseTrigger asChild>
-                                                            <CloseButton size="sm" />
-                                                        </Dialog.CloseTrigger>                                                                     
-                                                    </Dialog.Content>
-                                                </Dialog.Positioner>
-                                            </Portal>
-
-                                        </Dialog.Root>
-
-                                        <Dialog.Root>
-                                            <Dialog.Trigger asChild>
-                                                <FiEdit />
-                                            </Dialog.Trigger>
-                                            <Portal>
-                                                <Dialog.Backdrop/>
-                                                <Dialog.Positioner>
-                                                    <Dialog.Content>
-                                                        <Dialog.Header>
-                                                            <Dialog.Title>Pengkinian Akun Bank</Dialog.Title>
-                                                        </Dialog.Header>     
-
-                                                        <Dialog.Body>
-                                                            <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} gap="20px">
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Nomor Rekening</Field.Label>
-                                                                    <Input placeholder="Masukkan nomor rekening"/>
-                                                                </Field.Root>
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Bank</Field.Label>
-                                                                    <Input placeholder="Masukkan nama bank"/>
-                                                                </Field.Root>
-
-                                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                                    <Field.Label>Cabang</Field.Label>
-                                                                    <Input placeholder="Masukkan cabang bank terdaftar"/>
-                                                                </Field.Root>
-
-                                                            </SimpleGrid>
-                                                        </Dialog.Body>      
-                                                        
-                                                        <Dialog.Footer>
-                                                            <Dialog.ActionTrigger asChild>
-                                                                <Button variant="outline">Batal</Button>
-                                                            </Dialog.ActionTrigger>
-                                                            <Button>Simpan</Button>
-                                                        </Dialog.Footer>
-
-                                                        <Dialog.CloseTrigger asChild>
-                                                            <CloseButton size="sm" />
-                                                        </Dialog.CloseTrigger>                                                                     
-                                                    </Dialog.Content>
-                                                </Dialog.Positioner>
-                                            </Portal>
-
-                                        </Dialog.Root>
+                                        <BankAccountDialog triggerIcon={ <FiEdit />} title="Pengkinian Akun Bank"/>
 
                                         <Dialog.Root>
                                             <Dialog.Trigger asChild>
@@ -287,55 +148,7 @@ export default function FinanceSettings(){
                     
                     <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                         <Heading mb={6} width={"100%"}>Account Code List</Heading>
-
-                        <Dialog.Root>
-                            <Dialog.Trigger asChild>
-                                <Button>Create New Account Code</Button>
-                            </Dialog.Trigger>
-                            <Portal>
-                                <Dialog.Backdrop/>
-                                <Dialog.Positioner>
-                                    <Dialog.Content>
-                                        <Dialog.Header>
-                                            <Dialog.Title>Kode Akun</Dialog.Title>
-                                        </Dialog.Header>
-
-                                        <Dialog.Body>
-                                            <SimpleGrid columns={{ base: 1, md: 1, lg: 1 }} gap="20px">
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Kode Akun</Field.Label>
-                                                    <Input placeholder="Masukkan kode akun"/>
-                                                </Field.Root>    
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Nama Kode Akun</Field.Label>
-                                                    <Input placeholder="Masukkan nama kode akun"/>
-                                                </Field.Root>    
-
-                                                <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                    <Field.Label>Nama Kode Akun Alias</Field.Label>
-                                                    <Input placeholder="Masukkan nama kode akun alias"/>
-                                                </Field.Root>    
-
-                                            </SimpleGrid>
-                                        </Dialog.Body>
-
-                                        <Dialog.Footer>
-                                            <Dialog.ActionTrigger asChild>
-                                                <Button variant="outline">Batal</Button>
-                                            </Dialog.ActionTrigger>
-                                            <Button>Simpan</Button>   
-                                        </Dialog.Footer>
-
-                                        <Dialog.CloseTrigger asChild>
-                                            <CloseButton size="sm" />
-                                        </Dialog.CloseTrigger>                                        
-
-                                    </Dialog.Content>
-                                </Dialog.Positioner>
-                            </Portal>
-                        </Dialog.Root>
+                        <AccountCodeDialog triggerIcon={<Button>Create New Account Code</Button>} title="Kode Akun"/>
                     </Flex>    
 
                     <Table.Root showColumnBorder variant="outline" background={"white"}>
@@ -356,10 +169,20 @@ export default function FinanceSettings(){
                                 <Table.Cell textAlign="center">
                                     <Flex justify="center" gap={4} fontSize={"2xl"}>
 
-
-                                        <FiEye />
-                                        <FiEdit />
-
+                                        <AccountCodeDialog 
+                                            triggerIcon={<FiEye />} 
+                                            title="Lihat Kode Akun"
+                                        />
+                                        
+                                        <AccountCodeDialog 
+                                            triggerIcon={<FiEdit />} 
+                                            title="Edit Kode Akun" 
+                                            placeholders={{
+                                                kodeAkun: "Edit kode akun...",
+                                                namaAkun: "Edit nama kode akun...",
+                                                aliasAkun: "Edit alias akun...",
+                                            }}
+                                        />                            
 
                                         <Dialog.Root>
                                             <Dialog.Trigger asChild>
@@ -431,7 +254,7 @@ export default function FinanceSettings(){
 
                     <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                         <Heading mb={6} width={"100%"}>Finance Category List</Heading>
-                        <Button>Create New Category List</Button>
+                        <FinanceCategoryDialog triggerIcon={<Button>Create New Category List</Button>} title="Finance Category"/>
                     </Flex>    
 
                     <Table.Root showColumnBorder variant="outline" background={"white"}>
@@ -447,8 +270,9 @@ export default function FinanceSettings(){
                                 <Table.Cell textAlign={"center"}>{category.name}</Table.Cell>
                                 <Table.Cell textAlign="center">
                                     <Flex justify="center" gap={4} fontSize={"2xl"}>
-                                        <FiEye />
-                                        <FiEdit />
+                                        <FinanceCategoryDialog triggerIcon={<FiEye />} title="Lihat Kategori Finance"/>
+                                        <FinanceCategoryDialog triggerIcon={<FiEdit />} title="Edit Kategori Finance"/>
+
                                         <Dialog.Root>
                                             <Dialog.Trigger asChild>
                                                 <FiTrash />

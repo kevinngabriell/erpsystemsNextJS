@@ -3,6 +3,7 @@ import { Button, Card, Field, Flex, Heading, Input, Tabs, Textarea } from "@chak
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import CompanyTargetDialog from "./companytargetdialog";
 
 export default function CompanySettings(){
 
@@ -31,7 +32,7 @@ export default function CompanySettings(){
         <SidebarWithHeader>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Company Settings</Heading>
-                <Button>Create New Company Target</Button>
+                <CompanyTargetDialog triggerIcon={<Button>Create New Company Target</Button>} title="New Target"/>
             </Flex>
 
             <Card.Root>

@@ -1,8 +1,8 @@
 "use client";
-import { Button, ButtonGroup, Flex, Heading, IconButton, Pagination, Table } from "@chakra-ui/react";
-import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
+import { Button, ButtonGroup, CloseButton, Dialog, Flex, Heading, IconButton, Pagination, Portal, Table, Text } from "@chakra-ui/react";import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
+import PaymentMethodDialog from "./paymentDialog";
 
 export default function PaymentSettings(){
     const payments = [
@@ -17,7 +17,7 @@ export default function PaymentSettings(){
         <SidebarWithHeader>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Payment ERP Settings</Heading>
-                <Button>Create New Payment</Button>
+                <PaymentMethodDialog triggerIcon={<Button>Create New Payment</Button>} title="Penambahan Metode Pembayaran"/>
             </Flex>            
 
             <Table.Root showColumnBorder variant="outline" background={"white"} >
@@ -33,9 +33,40 @@ export default function PaymentSettings(){
                         <Table.Cell textAlign={"center"}>{payment.name}</Table.Cell>
                         <Table.Cell textAlign="center">
                             <Flex justify="center" gap={4} fontSize={"2xl"}>
-                                <FiEye />
-                                <FiEdit />
-                                <FiTrash />
+                                <PaymentMethodDialog triggerIcon={<FiEye />} title="Informasi Metode Pembayaran"/>
+                                <PaymentMethodDialog triggerIcon={<FiEdit />} title="Pengkinian Informasi Metode Pembayaran"/>
+                                <Dialog.Root>
+                                    <Dialog.Trigger asChild>
+                                        <FiTrash />
+                                    </Dialog.Trigger>
+                                    <Portal>
+                                        <Dialog.Backdrop/>
+                                        <Dialog.Positioner>
+                                            <Dialog.Content>
+                                                <Dialog.Header>
+                                                    <Dialog.Title>Hapus Negara</Dialog.Title>
+                                                </Dialog.Header>
+
+                                                 <Dialog.Body>
+                                                    <Text>Apakah anda yakin ingin menghapus negara ini ?</Text>
+                                                </Dialog.Body>
+
+                                                <Dialog.Footer>
+                                                    <Dialog.ActionTrigger asChild>
+                                                        <Button variant="outline">Batal</Button>
+                                                    </Dialog.ActionTrigger>
+                                                    <Button>Hapus</Button>
+                                                </Dialog.Footer>
+                                                
+                                                <Dialog.CloseTrigger asChild>
+                                                    <CloseButton size="sm" />
+                                                </Dialog.CloseTrigger>
+
+                                            </Dialog.Content>
+                                        </Dialog.Positioner>
+                                    </Portal>
+
+                                </Dialog.Root>  
                             </Flex>
                         </Table.Cell>
                     </Table.Row>

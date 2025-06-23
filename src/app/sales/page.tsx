@@ -1,14 +1,16 @@
 "use client";
 import { Button, Card, Flex, Heading, Stat, Text } from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
+import { useRouter } from "next/navigation";
 
 export default function Sales(){
-
+    const router = useRouter();
+    // <Button onClick={() => router.push('sales/salesorder')}>Create New Sales</Button>
     return(
         <SidebarWithHeader>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Sales Module</Heading>
-                <Button>Create New Sales</Button>
+                <Button onClick={() => router.push('sales/salesorder')}>Create New Sales</Button>
             </Flex>
 
             <Card.Root>

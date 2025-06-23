@@ -37,11 +37,11 @@ export default function Finance(){
             </Card.Root>           
 
             <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mt={"10"}>
-                <FinanceCard title="Penerimaan" description="Use this menu to do the penerimaan in finance department" link=""/>
-                <FinanceCard title="Pembayaran" description="Use this menu to do the pembayaran in finance department" link=""/>
-                <FinanceCard title="Penerimaan Pembelian" description="Use this menu to do the penerimaan pembelian in finance department" link=""/>
-                <FinanceCard title="Penerimaan penjualan" description="Use this menu to do the penerimaan penjualan in finance department" link=""/>
-                <FinanceCard title="Buku Kas" description="Use this menu to find buku kas in finance department" link=""/>
+                <FinanceCard title="Penerimaan" description="Use this menu to do the penerimaan in finance department" link="/finance/penerimaan"/>
+                <FinanceCard title="Pembayaran" description="Use this menu to do the pembayaran in finance department" link="/finance/pembayaran"/>
+                <FinanceCard title="Penerimaan Pembelian" description="Use this menu to do the penerimaan pembelian in finance department" link="/finance/penerimaanpembelian"/>
+                <FinanceCard title="Penerimaan penjualan" description="Use this menu to do the penerimaan penjualan in finance department" link="/finance/penerimaanpenjualan"/>
+                <FinanceCard title="Buku Kas" description="Use this menu to find buku kas in finance department" link="/finance/bukukas"/>
             </SimpleGrid>
         </SidebarWithHeader>
         // settings
@@ -55,8 +55,8 @@ function FinanceCard({title, description, link} : {title: string, description: s
     return(
         <Card.Root onClick={() => router.push(link)}>
             <Card.Body>
-                <Card.Title mb={2} textAlign="center" alignItems="center">{title}</Card.Title>
-                <Card.Description textAlign="center" alignItems="center">{description}</Card.Description>
+                <Card.Title mb={2}>{title}</Card.Title>
+                <Card.Description mb={0}>{description}</Card.Description>
             </Card.Body>
         </Card.Root>
     );

@@ -1,8 +1,12 @@
+"use client";
+
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { Button, Flex, Heading, Table } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 
 export default function Penerimaan(){
+    const router = useRouter();
 
     const penerimaans = [
         { id: 1, tanggal: "Laptop", deskripsi: "Electronics", jumlah: 999.99 },
@@ -12,11 +16,15 @@ export default function Penerimaan(){
         { id: 5, tanggal: "Headphones", deskripsi: "Accessories", jumlah: 199.99 },
     ]
 
+    function NewPenerimaan(){
+        router.push("/finance/penerimaan/detail");
+    }
+
     return(
         <SidebarWithHeader>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Penerimaan</Heading>
-                <Button>Create New Penerimaan</Button>
+                <Button onClick={NewPenerimaan}>Create New Penerimaan</Button>
             </Flex>      
         
             <Table.Root>

@@ -6,6 +6,9 @@ import { LuLock, LuUser } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  console.log("Base URL:", baseUrl);
+
   const router = useRouter();
 
   function loginOnClick() {

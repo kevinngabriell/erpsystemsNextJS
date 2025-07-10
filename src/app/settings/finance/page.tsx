@@ -1,27 +1,55 @@
 "use client";
-import { Button, ButtonGroup, CloseButton, Dialog, Field, Flex, Heading, IconButton, Input, Pagination, Portal, SimpleGrid, Table, Tabs, Text } from "@chakra-ui/react";
+import { Button, ButtonGroup, CloseButton, Dialog, Field, Flex, Heading, IconButton, Input, Pagination, Portal, SimpleGrid, Spinner, Table, Tabs, Text, Toast } from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import AccountCodeDialog from "./accountcodedialog";
 import BankAccountDialog from "./bankaccountdialog";
 import FinanceCategoryDialog from "./financecategorydialog";
+import { useEffect, useState } from "react";
+import { AccountCode, getAllAccountCode } from "@/lib/settings/accountcode";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import Loading from "@/components/loading";
+import UpgradeRequiredDialog from "@/components/dialog/UpgradeRequiredDialog";
 
 export default function FinanceSettings(){
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [accountCodeData, setAccountCodeData] = useState<AccountCode[]>([]);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+    const [isAccountDialogOpen, setIsAccountDialogOpen] = useState(false);
+    const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true)
+
+            const valid = await checkAuthOrRedirect(); // tunggu auth check selesai
+            if (!valid) return; // langsung return kalau token invalid (udah redirect juga)
+
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+
+            try {
+                const data = await getAllAccountCode();
+                setAccountCodeData(data);
+            } catch (err) {
+                // setError(err);
+                setAccountCodeData([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        init();
+    }, []);
+
     const bankaccount = [
         { id: 1, number: "001", bank: "Bank BCA", branch: "Grand Indonesia" },
         { id: 2, number: "002", bank: "Bank BCA (USD)", branch: "Gading Serpong" },
         { id: 3, number: "003", bank: "Bank Mandiri", branch: "Gading Serpong" },
         { id: 4, number: "004", bank: "Bank Mandiri (USD)", branch: "Gading Serpong" },
         { id: 5, number: "005", bank: "HSBC", branch: "Gading Serpong" },
-    ]
-
-    const accountname = [
-        { id: 1, code: "1100-00-010", name: "Kas Ditangan", alias: "Cash on Hand"},
-        { id: 2, code: "1100-00-020", name: "Kas Ditangan (USD)", alias: "Cash on Hand"},
-        { id: 3, code: "1100-00-030", name: "Bank Mandiri", alias: "Cash on Hand"},
-        { id: 4, code: "1100-00-040", name: "Bank Mandiri (USD)", alias: "Cash on Hand"},
-        { id: 5, code: "1100-00-050", name: "Bank BCA", alias: "Cash on Hand"}
     ]
 
     const category = [
@@ -31,8 +59,18 @@ export default function FinanceSettings(){
         { id: 4, name: "Penerimaan Penjualan" }
     ]
 
+    const handleOpenDialog = () => {
+        if (auth?.package === "sysadmin") {
+            setIsAccountDialogOpen(true);
+        } else {
+            setShowUpgradeDialog(true);
+        }
+    };
+
+    if (loading) return <Loading/>;
+
     return(
-        <SidebarWithHeader>
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Heading mb={6}>Finance ERP Settings</Heading>
 
             <Tabs.Root defaultValue="bank-account">
@@ -148,8 +186,21 @@ export default function FinanceSettings(){
                     
                     <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                         <Heading mb={6} width={"100%"}>Account Code List</Heading>
-                        <AccountCodeDialog triggerIcon={<Button>Create New Account Code</Button>} title="Kode Akun"/>
-                    </Flex>    
+                        <Button onClick={handleOpenDialog}>Create New Account Code</Button>
+                    </Flex>
+
+                    <AccountCodeDialog
+                        isOpen={isAccountDialogOpen}
+                        setIsOpen={setIsAccountDialogOpen}
+                        title="Kode Akun"
+                    />
+
+                    <UpgradeRequiredDialog
+                        isOpen={showUpgradeDialog}
+                        onClose={() => setShowUpgradeDialog(false)}
+                        currentPackage={auth?.package ?? ""}
+                        allowedPackages={["Advanced", "Enterprise"]}
+                    />
 
                     <Table.Root showColumnBorder variant="outline" background={"white"}>
                         <Table.Header>
@@ -161,28 +212,30 @@ export default function FinanceSettings(){
                             </Table.Row>
                         </Table.Header>   
                         <Table.Body>
-                            {accountname.map((account) => (
+                            {accountCodeData.map((account) => (
                             <Table.Row key={account.id}>
                                 <Table.Cell textAlign={"center"}>{account.code}</Table.Cell>
-                                <Table.Cell textAlign={"center"}>{account.name}</Table.Cell>
-                                <Table.Cell textAlign={"center"}>{account.alias}</Table.Cell>
+                                <Table.Cell textAlign={"center"}>{account.account_name}</Table.Cell>
+                                <Table.Cell textAlign={"center"}>{account.account_name_alias}</Table.Cell>
                                 <Table.Cell textAlign="center">
                                     <Flex justify="center" gap={4} fontSize={"2xl"}>
 
-                                        <AccountCodeDialog 
-                                            triggerIcon={<FiEye />} 
-                                            title="Lihat Kode Akun"
-                                        />
+                                        {/* <AccountCodeDialog 
+                                                triggerIcon={<FiEye />}
+                                                title="Lihat Kode Akun" isOpen={false} setIsOpen={function (open: boolean): void {
+                                                    throw new Error("Function not implemented.");
+                                                } }                                        />
                                         
                                         <AccountCodeDialog 
-                                            triggerIcon={<FiEdit />} 
-                                            title="Edit Kode Akun" 
-                                            placeholders={{
-                                                kodeAkun: "Edit kode akun...",
-                                                namaAkun: "Edit nama kode akun...",
-                                                aliasAkun: "Edit alias akun...",
-                                            }}
-                                        />                            
+                                                triggerIcon={<FiEdit />}
+                                                title="Edit Kode Akun"
+                                                placeholders={{
+                                                    kodeAkun: "Edit kode akun...",
+                                                    namaAkun: "Edit nama kode akun...",
+                                                    aliasAkun: "Edit alias akun...",
+                                                }} isOpen={false} setIsOpen={function (open: boolean): void {
+                                                    throw new Error("Function not implemented.");
+                                                } }                                        />                             */}
 
                                         <Dialog.Root>
                                             <Dialog.Trigger asChild>
@@ -224,7 +277,7 @@ export default function FinanceSettings(){
                     </Table.Root>
 
                     <Flex display={"flex"} justify="flex-end" alignItems={"end"} width={"100%"} mt={"3"}>
-                        <Pagination.Root count={accountname.length} pageSize={5} page={1} alignContent={"end"}>
+                        <Pagination.Root count={accountCodeData.length} pageSize={5} page={1} alignContent={"end"}>
                             <ButtonGroup variant="ghost" size="sm" wrap="wrap">
                             <Pagination.PrevTrigger asChild>
                                 <IconButton>
@@ -345,3 +398,4 @@ export default function FinanceSettings(){
 
     );
 }
+

@@ -1,17 +1,10 @@
 "use client";
-import {
-  Dialog,
-  Portal,
-  Field,
-  Input,
-  Button,
-  SimpleGrid,
-  CloseButton,
-} from "@chakra-ui/react";
+import { Dialog, Portal, Field, Input, Button, SimpleGrid, CloseButton} from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 interface AccountCodeDialogProps {
-  triggerIcon: ReactNode;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
   title: string;
   placeholders?: {
     kodeAkun?: string;
@@ -22,14 +15,14 @@ interface AccountCodeDialogProps {
 }
 
 export default function AccountCodeDialog({
-  triggerIcon,
   title,
+  isOpen,
+  setIsOpen,
   placeholders,
   onSubmit,
 }: AccountCodeDialogProps) {
   return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>{triggerIcon}</Dialog.Trigger>
+    <Dialog.Root open={isOpen} onOpenChange={(details) => setIsOpen(details.open)}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>

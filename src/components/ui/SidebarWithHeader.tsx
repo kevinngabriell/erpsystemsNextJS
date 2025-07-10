@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, CloseButton, Drawer,
+import { Box, BoxProps, Button, CloseButton, Drawer,
   Flex, FlexProps, HStack, Icon, IconButton, Text, useDisclosure,
   VStack} from "@chakra-ui/react"
 import { ReactNode } from "react"
@@ -9,6 +9,7 @@ import {
   FiGrid,
   FiMenu,
   FiBell,
+  FiLogOut,
 } from 'react-icons/fi'
 import {
     FaChartBar,
@@ -19,7 +20,7 @@ import {
     FaTruck,
     FaUserFriends,
 } from 'react-icons/fa'
-import { IconType } from "react-icons/lib"
+import { IconBaseProps, IconType } from "react-icons/lib"
 import { useColorModeValue } from "./color-mode"
 import { useRouter } from "next/navigation";
 
@@ -37,6 +38,7 @@ interface NavItemProps extends FlexProps {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void
+  username : string
 }
 
 interface SidebarProps extends BoxProps {
@@ -46,6 +48,7 @@ interface SidebarProps extends BoxProps {
 interface SidebarWithHeaderProps {
   children: ReactNode
   title?: string
+  username: string
   onLogout?: () => void
 }
 
@@ -62,11 +65,18 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+    const router = useRouter();
+
+    // Handles logout: remove token and redirect to login
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        router.push("/");
+    };
 
     return(
         <Box
             transition="3s ease"
-            bg={useColorModeValue('white','gray.900')} //ga tau warna fixnya apa wakakkaa
+            bg={useColorModeValue('white','gray.900')} 
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
             w={{ base: 'full', md: 60 }}
@@ -84,6 +94,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 {link.name}
                 </NavItem>
             ))}
+
+            <Flex position="absolute" bottom="0" width="100%" justify="center">
+              {/* <Button colorScheme="red" variant="outline" onClick={handleLogout}>
+                Sign out
+              </Button> */}
+              <NavItem icon={FiLogOut} onClick={handleLogout}>Logout</NavItem>
+            </Flex>
 
         </Box>
     )
@@ -131,7 +148,7 @@ const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
     )
 }
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, username, ...rest }: MobileProps) => {
     return(
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -168,7 +185,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                             wordSpacing="1px"
                             ml="2"
                         >
-                            <Text fontSize="sm">Kevin Gabriel</Text>
+                            <Text fontSize="sm">{username}</Text>
                         </VStack>
                     </HStack>
                     
@@ -178,7 +195,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     )
 }
 
-const SidebarWithHeader = ({ children }: SidebarWithHeaderProps) => {
+const SidebarWithHeader = ({ username, children }: SidebarWithHeaderProps) => {
   const { open, onOpen, onClose } = useDisclosure()
 
   return (
@@ -190,7 +207,7 @@ const SidebarWithHeader = ({ children }: SidebarWithHeaderProps) => {
             </Drawer.Content>
         </Drawer.Root>
 
-        <MobileNav onOpen={onOpen} />
+        <MobileNav onOpen={onOpen} username={username} />
         <Box ml={{ base: 0, md: 60 }} p="4">
             {children}
         </Box>

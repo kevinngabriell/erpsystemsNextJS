@@ -3,10 +3,29 @@ import { Button, ButtonGroup, CloseButton, Combobox, Dialog, Field, Flex, Headin
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
 
 export default function UserSettings(){
+    const [loading, setLoading] = useState(false);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true)
+
+            const valid = await checkAuthOrRedirect(); 
+            if (!valid) return; 
     
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+
+            setLoading(false)
+        };
+    
+        init();
+    }, []);
+
     const users = [
         { id: 1, name: "Admin1", company: "PT. Venken International Kimia", permission: "Sales only" },
         { id: 2, name: "Admin2", company: "PT. Venken International Kimia", permission: "Sales only" },
@@ -25,7 +44,7 @@ export default function UserSettings(){
     const [company, setCompany] = useState("PT. Segen Solutions");
 
     return(
-        <SidebarWithHeader>
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Users ERP Settings</Heading>
                 <Dialog.Root>

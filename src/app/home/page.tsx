@@ -1,9 +1,14 @@
 "use client";
-import {Card, Heading, SimpleGrid, Stat, Table} from "@chakra-ui/react";
+import {Card, Heading, SimpleGrid, Spinner, Stat, Table} from "@chakra-ui/react";
 import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { useColorModeValue } from "@/components/ui/color-mode";
+import { useEffect, useState } from "react";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import Loading from "@/components/loading";
 
 export default function Dashboard(){
+    const [isLoading, setIsLoading] = useState(false);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
 
     const dummyData = [
         { id: 1, name: "Produk A", price: 10000, stock: 20 },
@@ -11,8 +16,24 @@ export default function Dashboard(){
         { id: 3, name: "Produk C", price: 15000, stock: 30 },
     ];
 
+    useEffect(() => {
+        const check = async () => {
+            const valid = await checkAuthOrRedirect();
+            if (valid) setIsLoading(false);
+
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+        };
+        check();
+    }, []);
+
+    if (isLoading) {
+        return <Loading/>; // atau spinner dari chakra, dsb
+    }
+
+
     return(
-        <SidebarWithHeader>
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Heading mb={6}>ERP Dashboard</Heading>
 
             <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px">

@@ -4,8 +4,38 @@ import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 import CustomerDialog from "./customerdialog";
+import { useEffect, useState } from "react";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import { Customer, getAllCustomer } from "@/lib/settings/customer";
+import Loading from "@/components/loading";
 
 export default function CustomerSettings(){
+    const [loading, setLoading] = useState(false);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+    const [listCustomerData, setListCustomerData] = useState<Customer[]>([]);
+
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true)
+    
+            const valid = await checkAuthOrRedirect(); 
+            if (!valid) return; 
+        
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+    
+            try {
+                const data = await getAllCustomer();
+                setListCustomerData(data);
+            } catch (err) {
+                setListCustomerData([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+            init();
+    }, []);
 
     const customers = [
         { id: 1, name: "PT. Customer A", address : "Jl. Customer A", phone: "0811"},
@@ -15,12 +45,13 @@ export default function CustomerSettings(){
         { id: 5, name: "PT. Customer E", address : "Jl. Customer E", phone: "0811"}
     ]
 
-    return(
-        <SidebarWithHeader>
+    if(loading) return <Loading/>;
 
+    return(
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Customer ERP Settings</Heading>
-                <CustomerDialog triggerIcon={<Button>Create New Customer</Button>} title="Pendataan Konsumen Baru"/>
+                <CustomerDialog triggerIcon={<Button>Create New Customer</Button>} title="Pendataan Konsumen Baru" customer_id={""}/>
             </Flex>        
 
             <Table.Root showColumnBorder variant="outline" background={"white"} >
@@ -33,15 +64,15 @@ export default function CustomerSettings(){
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {customers.map((customer) => (
-                    <Table.Row key={customer.id}>
-                        <Table.Cell textAlign={"center"}>{customer.name}</Table.Cell>
-                        <Table.Cell textAlign={"center"}>{customer.address}</Table.Cell>
-                        <Table.Cell textAlign={"center"}>{customer.phone}</Table.Cell>
+                    {listCustomerData.map((customer) => (
+                    <Table.Row key={customer.customer_id}>
+                        <Table.Cell textAlign={"center"}>{customer.customer_name}</Table.Cell>
+                        <Table.Cell textAlign={"center"}>{customer.customer_address}</Table.Cell>
+                        <Table.Cell textAlign={"center"}>{customer.customer_phone}</Table.Cell>
                         <Table.Cell textAlign="center">
                             <Flex justify="center" gap={4} fontSize={"2xl"}>
-                                <CustomerDialog triggerIcon={<FiEye />} title="Informasi Konsumen"/>
-                                <CustomerDialog triggerIcon={<FiEdit />} title="Pengkinian Informasi Konsumen"/>
+                                <CustomerDialog triggerIcon={<FiEye />} title="Informasi Konsumen" customer_id={customer.customer_id}/>
+                                <CustomerDialog triggerIcon={<FiEdit />} title="Pengkinian Informasi Konsumen" customer_id={customer.customer_id}/>
 
                                 <Dialog.Root>
                                     <Dialog.Trigger asChild>

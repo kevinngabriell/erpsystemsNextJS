@@ -4,8 +4,38 @@ import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import CompanyTargetDialog from "./companytargetdialog";
+import { useEffect, useState } from "react";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import { Customer, getAllCustomer } from "@/lib/settings/customer";
+import Loading from "@/components/loading";
 
 export default function CompanySettings(){
+    const [loading, setLoading] = useState(false);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+    const [listCustomerData, setListCustomerData] = useState<Customer[]>([]);
+
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true)
+    
+            const valid = await checkAuthOrRedirect(); 
+            if (!valid) return; 
+        
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+    
+            try {
+                const data = await getAllCustomer();
+                setListCustomerData(data);
+            } catch (err) {
+                setListCustomerData([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+            init();
+    }, []);
 
     const chartData = [
         { year: 2021, target: 5000, fill: "var(--color-safari)" },
@@ -28,8 +58,10 @@ export default function CompanySettings(){
         },
      } satisfies ChartConfig
 
+      if(loading) return <Loading/>;
+
     return(
-        <SidebarWithHeader>
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Company Settings</Heading>
                 <CompanyTargetDialog triggerIcon={<Button>Create New Company Target</Button>} title="New Target"/>

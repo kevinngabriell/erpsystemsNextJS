@@ -120,7 +120,7 @@ function SettingCard({title, description, link, _package} : {title: string, desc
     const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
 
     const handleSettingMenuOnClick = () => {
-        if(title === "Users" && _package !== "sysadmin"){
+        if(title === "Users" || title === "Currency" && _package !== "sysadmin"){
             setShowUpgradeDialog(true);
         } else {
             router.push(link);

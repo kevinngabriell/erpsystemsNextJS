@@ -4,18 +4,43 @@ import SidebarWithHeader from "@/components/ui/SidebarWithHeader";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 import CurrencyDialog from "./currencydialog";
+import { useEffect, useState } from "react";
+import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import { Currency, getAllCurrency } from "@/lib/settings/currency";
+import Loading from "@/components/loading";
 
 export default function CurrencySettings(){
-    const currencies = [
-        { id: 1, name: "EUR"},
-        { id: 2, name: "USD"},
-        { id: 3, name: "CNY"},
-        { id: 4, name: "SGD"},
-        { id: 5, name: "IDR"}
-    ]
+    const [loading, setLoading] = useState(false);
+    const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+    const [listCurrency, setListCurrency] = useState<Currency[]>([]);
+    
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true)
+
+            const valid = await checkAuthOrRedirect(); 
+            if (!valid) return; 
+    
+            const info = getAuthInfo(); // ✅ ambil token decoded
+            setAuth(info);
+
+            try {
+                const data = await getAllCurrency();
+                setListCurrency(data);
+            } catch (err) {
+                setListCurrency([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        init();
+    }, []);
+
+    if(loading) return <Loading/>;
 
     return(
-        <SidebarWithHeader>
+        <SidebarWithHeader username={auth?.username ?? "-"}>
             <Flex gap={2} display={"flex"} mb={"2"} mt={"2"}>
                 <Heading mb={6} width={"100%"}>Currency ERP Settings</Heading>
                 <CurrencyDialog triggerIcon={<Button>Create New Currency</Button>} title="Pendataan Mata Uang"/>
@@ -29,9 +54,9 @@ export default function CurrencySettings(){
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {currencies.map((currency) => (
-                    <Table.Row key={currency.id}>
-                        <Table.Cell textAlign={"center"}>{currency.name}</Table.Cell>
+                    {listCurrency.map((currency) => (
+                    <Table.Row key={currency.currency_id}>
+                        <Table.Cell textAlign={"center"}>{currency.currency_name}</Table.Cell>
                         <Table.Cell textAlign="center">
                             <Flex justify="center" gap={4} fontSize={"2xl"}>
                                 <CurrencyDialog triggerIcon={<FiEye />} title="Informasi Mata Uang"/>
@@ -76,7 +101,7 @@ export default function CurrencySettings(){
             </Table.Root>
             
             <Flex display={"flex"} justify="flex-end" alignItems={"end"} width={"100%"} mt={"3"}>
-                <Pagination.Root count={currencies.length} pageSize={5} page={1} alignContent={"end"}>
+                <Pagination.Root count={listCurrency.length} pageSize={5} page={1} alignContent={"end"}>
                     <ButtonGroup variant="ghost" size="sm" wrap="wrap">
                     <Pagination.PrevTrigger asChild>
                         <IconButton>

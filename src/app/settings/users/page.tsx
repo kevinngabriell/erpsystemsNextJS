@@ -5,10 +5,14 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { checkAuthOrRedirect, DecodedAuthToken, getAuthInfo } from "@/lib/auth/auth";
+import { getAllUsers, Users } from "@/lib/settings/users";
+import Loading from "@/components/loading";
+import UserDialog from "./userdetaildialog";
 
 export default function UserSettings(){
     const [loading, setLoading] = useState(false);
     const [auth, setAuth] = useState<DecodedAuthToken | null>(null);
+    const [listUsersData, setListUsersData] = useState<Users[]>([]);
 
     useEffect(() => {
         const init = async () => {
@@ -20,7 +24,14 @@ export default function UserSettings(){
             const info = getAuthInfo(); // ✅ ambil token decoded
             setAuth(info);
 
-            setLoading(false)
+            try {
+                const data = await getAllUsers();
+                setListUsersData(data);
+            } catch (err) {
+                setListUsersData([]);
+            } finally {
+                setLoading(false);
+            }
         };
     
         init();
@@ -41,7 +52,7 @@ export default function UserSettings(){
         filter: contains
     });
 
-    const [company, setCompany] = useState("PT. Segen Solutions");
+    if(loading) return <Loading/>;
 
     return(
         <SidebarWithHeader username={auth?.username ?? "-"}>
@@ -89,91 +100,15 @@ export default function UserSettings(){
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {users.map((user) => (
-                    <Table.Row key={user.id}>
-                        <Table.Cell textAlign={"center"}>{user.name}</Table.Cell>
-                        <Table.Cell textAlign={"center"}>{user.company}</Table.Cell>
-                        <Table.Cell textAlign={"center"}>{user.permission}</Table.Cell>
+                    {listUsersData.map((user) => (
+                    <Table.Row key={user.username}>
+                        <Table.Cell textAlign={"center"}>{user.username}</Table.Cell>
+                        <Table.Cell textAlign={"center"}>{user.company_name}</Table.Cell>
+                        <Table.Cell textAlign={"center"}>{user.permission_access}</Table.Cell>
                         <Table.Cell textAlign="center">
                             <Flex justify="center" gap={4} fontSize={"2xl"}>
-                                {/* View User Detail */}
-                                <Dialog.Root>
-                                    <Dialog.Trigger asChild>
-                                        <FiEye />
-                                    </Dialog.Trigger>
-                                    <Portal>
-                                        <Dialog.Backdrop/>
-                                        <Dialog.Positioner zIndex={3000} position="absolute">
-                                            <Dialog.Content>
-                                                <Dialog.Header>
-                                                    <Dialog.Title>Detail Users</Dialog.Title>
-                                                </Dialog.Header>
-
-                                                <Dialog.Body>
-                                                    <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} gap="20px" background={"transparent"}>
-                                                        
-                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                            <Field.Label>Nama</Field.Label>
-                                                            <Input placeholder="Masukkan nama anda disini" readOnly/>
-                                                        </Field.Root>
-
-                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                            <Field.Label>Username</Field.Label>
-                                                            <Input placeholder="Masukkan username anda disini" readOnly/>
-                                                        </Field.Root>
-
-                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                            <Field.Label>Perusahaan</Field.Label>
-                                                            <Input placeholder="Masukkan nama perusahan anda" value={company} onChange={(e) => setCompany(e.target.value)} readOnly/>
-                                                        </Field.Root>
-
-                                                        <Field.Root w={{base: "100%", md: "100%", lg: "100%"}}>
-                                                            <Combobox.Root
-                                                            collection={collection}
-                                                            onInputValueChange={(e) => filter(e.inputValue)}
-                                                            >
-                                                                <Combobox.Label>Pilih akses</Combobox.Label>
-                                                                <Combobox.Control>
-                                                                    <Combobox.Input placeholder="Type to search" />
-                                                                    <Combobox.IndicatorGroup>
-                                                                    <Combobox.ClearTrigger />
-                                                                    <Combobox.Trigger />
-                                                                    </Combobox.IndicatorGroup>
-                                                                </Combobox.Control>
-                                                                <Portal>
-                                                                    <Combobox.Positioner>
-                                                                    <Combobox.Content>
-                                                                        <Combobox.Empty>No items found</Combobox.Empty>
-                                                                        {collection.items.map((item) => (
-                                                                        <Combobox.Item item={item} key={item.id}>
-                                                                            {item.access}
-                                                                            <Combobox.ItemIndicator />
-                                                                        </Combobox.Item>
-                                                                        ))}
-                                                                    </Combobox.Content>
-                                                                    </Combobox.Positioner>
-                                                                </Portal>
-                                                            </Combobox.Root>
-                                                        </Field.Root>
-
-                                                    </SimpleGrid>
-                                                </Dialog.Body>
-
-                                                <Dialog.Footer>
-                                                    <Dialog.ActionTrigger asChild>
-                                                        <Button variant="outline">Cancel</Button>
-                                                    </Dialog.ActionTrigger>
-                                                    <Button>Reset Account</Button>
-                                                </Dialog.Footer>
-
-                                                <Dialog.CloseTrigger asChild>
-                                                    <CloseButton size="sm" />
-                                                </Dialog.CloseTrigger>
-                                            </Dialog.Content>
-                                        </Dialog.Positioner>
-                                    </Portal>
-                                </Dialog.Root>
-                                <FiEdit />
+                                <UserDialog triggerIcon={<FiEye />} title={"Lihat Data Users"} username={user.username} action={"view"} />
+                                <UserDialog triggerIcon={<FiEdit />} title={"Update Data Users"} username={user.username} action={"update"} />
 
                                 <Dialog.Root>
                                     <Dialog.Trigger asChild>
